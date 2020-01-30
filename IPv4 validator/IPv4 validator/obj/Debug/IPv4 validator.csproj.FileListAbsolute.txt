@@ -1,0 +1,9 @@
+C:\Users\blair\source\repos\IPv4 validator\IPv4 validator\bin\Debug\IPv4 validator.exe.config
+C:\Users\blair\source\repos\IPv4 validator\IPv4 validator\bin\Debug\IPv4 validator.exe
+C:\Users\blair\source\repos\IPv4 validator\IPv4 validator\bin\Debug\IPv4 validator.pdb
+C:\Users\blair\source\repos\IPv4 validator\IPv4 validator\obj\Debug\IPv4_validator.Properties.Resources.resources
+C:\Users\blair\source\repos\IPv4 validator\IPv4 validator\obj\Debug\IPv4 validator.csproj.GenerateResource.cache
+C:\Users\blair\source\repos\IPv4 validator\IPv4 validator\obj\Debug\IPv4 validator.exe
+C:\Users\blair\source\repos\IPv4 validator\IPv4 validator\obj\Debug\IPv4 validator.pdb
+C:\Users\blair\source\repos\IPv4 validator\IPv4 validator\obj\Debug\IPv4 validator.csprojAssemblyReference.cache
+C:\Users\blair\source\repos\IPv4 validator\IPv4 validator\obj\Debug\IPv4_validator.IPv4Validator.resources

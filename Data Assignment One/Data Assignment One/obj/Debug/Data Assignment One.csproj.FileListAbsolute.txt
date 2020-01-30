@@ -1,0 +1,9 @@
+C:\Users\blair\source\repos\Data Assignment One\Data Assignment One\obj\Debug\Data Assignment One.csprojAssemblyReference.cache
+C:\Users\blair\source\repos\Data Assignment One\Data Assignment One\obj\Debug\Data_Assignment_One.Properties.Resources.resources
+C:\Users\blair\source\repos\Data Assignment One\Data Assignment One\obj\Debug\Data Assignment One.csproj.GenerateResource.cache
+C:\Users\blair\source\repos\Data Assignment One\Data Assignment One\bin\Debug\Data Assignment One.exe.config
+C:\Users\blair\source\repos\Data Assignment One\Data Assignment One\bin\Debug\Data Assignment One.exe
+C:\Users\blair\source\repos\Data Assignment One\Data Assignment One\bin\Debug\Data Assignment One.pdb
+C:\Users\blair\source\repos\Data Assignment One\Data Assignment One\obj\Debug\Data Assignment One.exe
+C:\Users\blair\source\repos\Data Assignment One\Data Assignment One\obj\Debug\Data Assignment One.pdb
+C:\Users\blair\source\repos\Data Assignment One\Data Assignment One\obj\Debug\Data_Assignment_One.NumberConversion.resources
