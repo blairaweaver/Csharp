@@ -1,6 +1,8 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\MyPacketCapturer"
   ],
+  "SelectedNode": "\\MyPacketCapturer\\MyPacketCapturer.sln",
   "PreviewInSolutionExplorer": false
 }

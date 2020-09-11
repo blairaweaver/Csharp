@@ -19,8 +19,8 @@ namespace MyPacketCapturer
         //The device we will be using
         public static ICaptureDevice device;
         //date that is captured
-        public static string stringPackets = ""
-            ;
+        public static string stringPackets = "";
+        static int numPackets = 0;
         public Form1()
         {
             InitializeComponent();
@@ -40,30 +40,72 @@ namespace MyPacketCapturer
                 cmbDevices.Items.Add(dev.Description);
             }
 
-            //This is what Dr. Harris had. I prefer to only have this in one spot. Added an if in the event to catch if a device is not selected
-
-            ////get the first device and display in combo box
-            //device = devices[6];
-            //cmbDevices.Text = device.Description;
-
-            ////Register the handler function
-            //device.OnPacketArrival += new SharpPcap.PacketArrivalEventHandler(device_OnPacketArrival);
-
-            ////Open the device for capturing
-            //int readTimeoutMilliseconds = 1000;
-            //device.Open(DeviceMode.Promiscuous, readTimeoutMilliseconds);
         }
 
         private static void device_OnPacketArrival(object sender, CaptureEventArgs packet)
         {
+            //increment the number of packets captured
+            numPackets++;
+
+            //Put the packet number in the capture window
+            stringPackets += "Packet Number: " + Convert.ToString(numPackets);
+            stringPackets += Environment.NewLine;
+
             //array to store our data
             byte[] data = packet.Packet.Data;
 
             //keep track of the number of bytes displayed per line
             int byteCounter = 0;
 
+            stringPackets += "Destination MAC Address: ";
+            //Parse the packet
+            foreach (byte b in data)
+            {
+                if(byteCounter <= 13)
+                {
+                    //Add the byte to the stringe (in hex)
+                    stringPackets += b.ToString("X2") + " ";
+                }
+
+                byteCounter++;
+
+                switch (byteCounter)
+                {
+                    case 6: 
+                        stringPackets += Environment.NewLine;
+                        stringPackets += "Source MAC Address: ";
+                        break;
+                    case 12:
+                        stringPackets += Environment.NewLine;
+                        stringPackets += "EtherType: ";
+                        break;
+                    case 14:
+                        if(data[12] == 8)
+                        {
+                            if (data[13] == 0)
+                            {
+                                stringPackets += "(IP)";
+                            }
+                            else if (data[13] == 6)
+                            {
+                                stringPackets += "(ARP)";
+                            }
+                        }
+                        stringPackets += Environment.NewLine;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            stringPackets += Environment.NewLine;
+
+            //Reset the byte counter for next loop
+            byteCounter = 0;
+            stringPackets += "Raw Data" + Environment.NewLine;
+
             //Process each byte in our capture packet
-            foreach(byte b in data)
+            foreach (byte b in data)
             {
                 //Add the byte tot he stringe (in hex)
                 stringPackets += b.ToString("X2") + " ";
@@ -79,8 +121,7 @@ namespace MyPacketCapturer
                 
             }
 
-            stringPackets += Environment.NewLine;
-            stringPackets += Environment.NewLine;
+            stringPackets += Environment.NewLine + Environment.NewLine;
         }
 
         private void btnStartStop_Click(object sender, EventArgs e)
@@ -112,8 +153,10 @@ namespace MyPacketCapturer
 
         }
 
+        //This is used to update the textboxes in the window
         private void timer1_Tick(object sender, EventArgs e)
         {
+            txtNumPackets.Text = Convert.ToString(numPackets);
             txtCapturedData.AppendText(stringPackets);
             stringPackets = "";
         }
@@ -129,6 +172,42 @@ namespace MyPacketCapturer
             //Open the device for capturing
             int readTimeoutMilliseconds = 1000;
             device.Open(DeviceMode.Promiscuous, readTimeoutMilliseconds);
+        }
+
+        private void txtCapturedData_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            saveFileDialog1.Filter = "Text Files|*.txt|All Files|*.*";
+            saveFileDialog1.Title = "Save the Captured Packets";
+            saveFileDialog1.ShowDialog();
+
+            //check if filename was given
+            if(saveFileDialog1.FileName != "")
+            {
+                System.IO.File.WriteAllText(saveFileDialog1.FileName, txtCapturedData.Text);
+            }
+        }
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.Filter = "Text Files|*.txt|All Files|*.*";
+            openFileDialog1.Title = "Save the Captured Packets";
+            openFileDialog1.ShowDialog();
+
+            //check if filename was given
+            if (openFileDialog1.FileName != "")
+            {
+                txtCapturedData.Text = System.IO.File.ReadAllText(openFileDialog1.FileName);
+            }
         }
     }
 }
