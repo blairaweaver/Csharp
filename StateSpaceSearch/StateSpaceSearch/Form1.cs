@@ -13,7 +13,9 @@ namespace StateSpaceSearch
     public partial class Form1 : Form
     {
         private Map m;
-        private Searching searchForm;
+        private OutputForm outputForm;
+        //store the search pattern used
+        StateSearch search;
 
         public Form1()
         {
@@ -41,19 +43,21 @@ namespace StateSpaceSearch
                 return;
             }
 
-            
             //create the new form which will do the searching
+            outputForm = new OutputForm(m);
+            //create the search form that will be used
             if (aStarRadioButton.Checked == true)
             {
-                searchForm = new Searching(m, 0, m.nodes[startComboBox.SelectedIndex], m.nodes[destComboBox.SelectedIndex]);
+                search = new AStarSearch(m.nodes[startComboBox.SelectedIndex], m.nodes[destComboBox.SelectedIndex], outputForm);
             }
             else
             {
-                searchForm = new Searching(m, 0, m.nodes[startComboBox.SelectedIndex], m.nodes[destComboBox.SelectedIndex]);
+                search = new DepthFirstSearch(m.nodes[startComboBox.SelectedIndex], m.nodes[destComboBox.SelectedIndex], outputForm);
             }
+            //let the output form know the search so that it can start it
+            outputForm.SetSearch(search);
 
-
-            searchForm.Show();
+            outputForm.Show();
         }
     }
 }

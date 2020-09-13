@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\blair\\Source\\Repos\\Csharp\\StateSpaceSearch\\StateSpaceSearch\\StateSpaceSearch.csproj": {}
+    "C:\\Users\\blair\\source\\repos\\Csharp\\StateSpaceSearch\\StateSpaceSearch\\StateSpaceSearch.csproj": {}
   },
   "projects": {
-    "C:\\Users\\blair\\Source\\Repos\\Csharp\\StateSpaceSearch\\StateSpaceSearch\\StateSpaceSearch.csproj": {
+    "C:\\Users\\blair\\source\\repos\\Csharp\\StateSpaceSearch\\StateSpaceSearch\\StateSpaceSearch.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\blair\\Source\\Repos\\Csharp\\StateSpaceSearch\\StateSpaceSearch\\StateSpaceSearch.csproj",
+        "projectUniqueName": "C:\\Users\\blair\\source\\repos\\Csharp\\StateSpaceSearch\\StateSpaceSearch\\StateSpaceSearch.csproj",
         "projectName": "StateSpaceSearch",
-        "projectPath": "C:\\Users\\blair\\Source\\Repos\\Csharp\\StateSpaceSearch\\StateSpaceSearch\\StateSpaceSearch.csproj",
+        "projectPath": "C:\\Users\\blair\\source\\repos\\Csharp\\StateSpaceSearch\\StateSpaceSearch\\StateSpaceSearch.csproj",
         "packagesPath": "C:\\Users\\blair\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\blair\\Source\\Repos\\Csharp\\StateSpaceSearch\\StateSpaceSearch\\obj\\",
+        "outputPath": "C:\\Users\\blair\\source\\repos\\Csharp\\StateSpaceSearch\\StateSpaceSearch\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\blair\\AppData\\Roaming\\NuGet\\NuGet.Config",

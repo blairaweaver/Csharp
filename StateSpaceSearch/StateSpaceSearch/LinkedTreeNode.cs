@@ -4,7 +4,7 @@ using System.Text;
 
 namespace StateSpaceSearch
 {
-    class LinkedTreeNode
+    public class LinkedTreeNode
     {
         private LinkedTreeNode parentNode;
         private List<LinkedTreeNode> childNodes;
@@ -17,18 +17,29 @@ namespace StateSpaceSearch
             childNodes = new List<LinkedTreeNode>();
         }
 
-        public void addChildNode(LinkedTreeNode child)
+        public void AddChildNode(LinkedTreeNode child)
         {
             childNodes.Add(child);
         }
 
-        public LinkedTreeNode getParent()
+        public LinkedTreeNode GetParent()
         {
             return parentNode;
         }
-        public MapNode getMapNode()
+        public MapNode GetMapNode()
         {
             return mapNodeEquilvalent;
+        }
+
+        //This should only be for a repeat node
+        public void RemoveChild(LinkedTreeNode child)
+        {
+            childNodes.Remove(child);
+        }
+
+        public Boolean SameNode(LinkedTreeNode node)
+        {
+            return this.mapNodeEquilvalent == node.mapNodeEquilvalent;
         }
     }
 }
