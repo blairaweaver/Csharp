@@ -25,7 +25,6 @@ C:\Users\blair\Source\Repos\Csharp\MyPacketCapturer\MyPacketCapturer\bin\Debug\n
 C:\Users\blair\Source\Repos\Csharp\MyPacketCapturer\MyPacketCapturer\bin\Debug\netcoreapp3.1\PacketDotNet.dll
 C:\Users\blair\Source\Repos\Csharp\MyPacketCapturer\MyPacketCapturer\bin\Debug\netcoreapp3.1\SharpPcap.dll
 C:\Users\blair\Source\Repos\Csharp\MyPacketCapturer\MyPacketCapturer\obj\Debug\netcoreapp3.1\MyPacketCapturer.csprojAssemblyReference.cache
-C:\Users\blair\Source\Repos\Csharp\MyPacketCapturer\MyPacketCapturer\obj\Debug\netcoreapp3.1\MyPacketCapturer.Form1.resources
 C:\Users\blair\Source\Repos\Csharp\MyPacketCapturer\MyPacketCapturer\obj\Debug\netcoreapp3.1\MyPacketCapturer.csproj.GenerateResource.cache
 C:\Users\blair\Source\Repos\Csharp\MyPacketCapturer\MyPacketCapturer\obj\Debug\netcoreapp3.1\MyPacketCapturer.AssemblyInfoInputs.cache
 C:\Users\blair\Source\Repos\Csharp\MyPacketCapturer\MyPacketCapturer\obj\Debug\netcoreapp3.1\MyPacketCapturer.AssemblyInfo.cs
@@ -34,3 +33,5 @@ C:\Users\blair\Source\Repos\Csharp\MyPacketCapturer\MyPacketCapturer\obj\Debug\n
 C:\Users\blair\Source\Repos\Csharp\MyPacketCapturer\MyPacketCapturer\obj\Debug\netcoreapp3.1\MyPacketCapturer.dll
 C:\Users\blair\Source\Repos\Csharp\MyPacketCapturer\MyPacketCapturer\obj\Debug\netcoreapp3.1\MyPacketCapturer.pdb
 C:\Users\blair\Source\Repos\Csharp\MyPacketCapturer\MyPacketCapturer\obj\Debug\netcoreapp3.1\MyPacketCapturer.genruntimeconfig.cache
+C:\Users\blair\Source\Repos\Csharp\MyPacketCapturer\MyPacketCapturer\obj\Debug\netcoreapp3.1\MyPacketCapturer.PacketCaptureForm.resources
+C:\Users\blair\Source\Repos\Csharp\MyPacketCapturer\MyPacketCapturer\obj\Debug\netcoreapp3.1\MyPacketCapturer.SendForm.resources

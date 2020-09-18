@@ -1,8 +1,9 @@
 {
   "ExpandedNodes": [
     "",
+    "\\MyPacketCapturer",
     "\\StateSpaceSearch"
   ],
-  "SelectedNode": "\\StateSpaceSearch\\StateSpaceSearch.sln",
+  "SelectedNode": "\\MyPacketCapturer\\MyPacketCapturer.sln",
   "PreviewInSolutionExplorer": false
 }

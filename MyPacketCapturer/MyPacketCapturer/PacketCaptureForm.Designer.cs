@@ -1,6 +1,8 @@
-﻿namespace MyPacketCapturer
+﻿using System;
+
+namespace MyPacketCapturer
 {
-    partial class Form1
+    partial class PacketCaptureForm
     {
         /// <summary>
         ///  Required designer variable.
@@ -29,7 +31,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PacketCaptureForm));
             this.btnStartStop = new System.Windows.Forms.Button();
             this.cmbDevices = new System.Windows.Forms.ComboBox();
             this.txtCapturedData = new System.Windows.Forms.TextBox();
@@ -48,6 +50,8 @@
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.screenStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.packetMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sendMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.txtNumPackets = new System.Windows.Forms.TextBox();
@@ -94,7 +98,8 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.screenStripMenuItem});
+            this.screenStripMenuItem,
+            this.packetMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(516, 24);
@@ -151,6 +156,7 @@
             this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
             this.saveToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.saveToolStripMenuItem.Text = "&Save";
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // saveAsToolStripMenuItem
             // 
@@ -205,6 +211,22 @@
             this.clearMenuItem.Name = "clearMenuItem";
             this.clearMenuItem.Size = new System.Drawing.Size(101, 22);
             this.clearMenuItem.Text = "Clear";
+            this.clearMenuItem.Click += new System.EventHandler(this.clearMenuItem_Click);
+            // 
+            // packetMenuItem
+            // 
+            this.packetMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.sendMenuItem});
+            this.packetMenuItem.Name = "packetMenuItem";
+            this.packetMenuItem.Size = new System.Drawing.Size(59, 20);
+            this.packetMenuItem.Text = "Packets";
+            // 
+            // sendMenuItem
+            // 
+            this.sendMenuItem.Name = "sendMenuItem";
+            this.sendMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.sendMenuItem.Text = "Send &Packet";
+            this.sendMenuItem.Click += new System.EventHandler(this.sendMenuItem_Click);
             // 
             // openFileDialog1
             // 
@@ -228,7 +250,7 @@
             this.packetNumLabel.TabIndex = 5;
             this.packetNumLabel.Text = "Number of Packets";
             // 
-            // Form1
+            // PacketCaptureForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -240,7 +262,7 @@
             this.Controls.Add(this.btnStartStop);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
-            this.Name = "Form1";
+            this.Name = "PacketCaptureForm";
             this.Text = "Packet Capture";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -273,6 +295,8 @@
         private System.Windows.Forms.ToolStripMenuItem clearMenuItem;
         private System.Windows.Forms.TextBox txtNumPackets;
         private System.Windows.Forms.Label packetNumLabel;
+        private System.Windows.Forms.ToolStripMenuItem packetMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sendMenuItem;
     }
 }
 

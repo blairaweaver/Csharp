@@ -12,8 +12,9 @@ using System.Windows.Forms;
 
 namespace MyPacketCapturer
 {
-    public partial class Form1 : Form
+    public partial class PacketCaptureForm : Form
     {
+        private String workingFilename = "";
         //List of devices for this computer
         CaptureDeviceList devices;
         //The device we will be using
@@ -21,7 +22,9 @@ namespace MyPacketCapturer
         //date that is captured
         public static string stringPackets = "";
         static int numPackets = 0;
-        public Form1()
+        //This will be our send form
+        SendForm sendForm;
+        public PacketCaptureForm()
         {
             InitializeComponent();
             //get list of devices
@@ -178,12 +181,46 @@ namespace MyPacketCapturer
         {
 
         }
+        private void sendMenuItem_Click(object sender, EventArgs e)
+        {
+            if (SendForm.instantiations == 0)
+            {
+                sendForm = new SendForm();
+                sendForm.Show();
+            }
+        }
+
+        private void clearMenuItem_Click(Object sender, EventArgs e)
+        {
+            txtCapturedData.Clear();
+            numPackets = 0;
+            txtNumPackets.Text = Convert.ToString(numPackets);
+        }
 
         private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
 
         }
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(workingFilename != "")
+            {
+                System.IO.File.WriteAllText(workingFilename, txtCapturedData.Text);
+            }
+            else
+            {
+                saveFileDialog1.Filter = "Text Files|*.txt|All Files|*.*";
+                saveFileDialog1.Title = "Save the Captured Packets";
+                saveFileDialog1.ShowDialog();
 
+                //check if filename was given
+                if (saveFileDialog1.FileName != "")
+                {
+                    System.IO.File.WriteAllText(saveFileDialog1.FileName, txtCapturedData.Text);
+                    workingFilename = saveFileDialog1.FileName;
+                }
+            }
+        }
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             saveFileDialog1.Filter = "Text Files|*.txt|All Files|*.*";
@@ -194,6 +231,7 @@ namespace MyPacketCapturer
             if(saveFileDialog1.FileName != "")
             {
                 System.IO.File.WriteAllText(saveFileDialog1.FileName, txtCapturedData.Text);
+                workingFilename = saveFileDialog1.FileName;
             }
         }
 
@@ -207,6 +245,7 @@ namespace MyPacketCapturer
             if (openFileDialog1.FileName != "")
             {
                 txtCapturedData.Text = System.IO.File.ReadAllText(openFileDialog1.FileName);
+                workingFilename = openFileDialog1.FileName;
             }
         }
     }
