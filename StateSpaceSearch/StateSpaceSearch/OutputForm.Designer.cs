@@ -54,13 +54,18 @@
             // 
             // textOuput
             // 
-            this.textOuput.Location = new System.Drawing.Point(82, 230);
+            this.textOuput.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textOuput.Font = new System.Drawing.Font("Courier New", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.textOuput.Location = new System.Drawing.Point(12, 27);
             this.textOuput.Multiline = true;
             this.textOuput.Name = "textOuput";
             this.textOuput.ReadOnly = true;
-            this.textOuput.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textOuput.Size = new System.Drawing.Size(287, 162);
+            this.textOuput.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.textOuput.Size = new System.Drawing.Size(776, 411);
             this.textOuput.TabIndex = 1;
+            this.textOuput.WordWrap = false;
             // 
             // OutputForm
             // 

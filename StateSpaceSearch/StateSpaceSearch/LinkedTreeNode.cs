@@ -4,7 +4,7 @@ using System.Text;
 
 namespace StateSpaceSearch
 {
-    public class LinkedTreeNode
+    public class LinkedTreeNode : IComparable, IEquatable<LinkedTreeNode>
     {
         private LinkedTreeNode parentNode;
         private List<LinkedTreeNode> childNodes;
@@ -37,9 +37,68 @@ namespace StateSpaceSearch
             childNodes.Remove(child);
         }
 
-        public Boolean SameNode(LinkedTreeNode node)
+        public override string ToString()
         {
-            return this.mapNodeEquilvalent == node.mapNodeEquilvalent;
+            return mapNodeEquilvalent.ToString();
+        }
+
+        //implements IComparable interface and allows for comparison
+        public int CompareTo(object obj)
+        {
+            if (obj is LinkedTreeNode)
+            {
+                return this.mapNodeEquilvalent.CompareTo((obj as LinkedTreeNode).mapNodeEquilvalent);
+            }
+            throw new ArgumentException("Object is not a Map Node");
+        }
+
+        //Everything below here is so that two map nodes can be compared consistently
+        //see https://docs.microsoft.com/en-us/dotnet/api/system.iequatable-1.equals?view=netcore-3.1
+        public bool Equals(LinkedTreeNode other)
+        {
+            if (other == null)
+            {
+                return false;
+            }
+            if (this.mapNodeEquilvalent == other.mapNodeEquilvalent)
+            {
+                return true;
+            }
+            else
+                return false;
+        }
+
+        public override bool Equals(Object obj)
+        {
+            if (obj == null)
+                return false;
+
+            LinkedTreeNode LinkedTreeNodeObj = obj as LinkedTreeNode;
+            if (LinkedTreeNodeObj == null)
+                return false;
+            else
+                return Equals(LinkedTreeNodeObj);
+        }
+
+        public override int GetHashCode()
+        {
+            return this.mapNodeEquilvalent.GetHashCode();
+        }
+
+        public static bool operator ==(LinkedTreeNode LinkedTreeNode1, LinkedTreeNode LinkedTreeNode2)
+        {
+            if (((object)LinkedTreeNode1) == null || ((object)LinkedTreeNode2) == null)
+                return Object.Equals(LinkedTreeNode1, LinkedTreeNode2);
+
+            return LinkedTreeNode1.Equals(LinkedTreeNode2);
+        }
+
+        public static bool operator !=(LinkedTreeNode LinkedTreeNode1, LinkedTreeNode LinkedTreeNode2)
+        {
+            if (((object)LinkedTreeNode1) == null || ((object)LinkedTreeNode2) == null)
+                return !Object.Equals(LinkedTreeNode1, LinkedTreeNode2);
+
+            return !(LinkedTreeNode1.Equals(LinkedTreeNode2));
         }
     }
 }

@@ -5,11 +5,25 @@ using System.Text;
 
 namespace StateSpaceSearch
 {
-    public class MapNode : IComparable
+    public class MapNode : IComparable, IEquatable<MapNode>
     {
+        //set variables and properties for variables
         private string cityName;
+        public string CityName
+        {
+            get { return cityName; }
+        }
         private List<MapNode> neighbors;
+        public List<MapNode> Neighbors
+        {
+            get { return neighbors; }
+        }
         private List<int> distances;
+        private int numBranches = 0;
+        public int NumbBranches
+        {
+            get { return numBranches; }
+        }
 
         public MapNode(string cityName)
         {
@@ -23,12 +37,7 @@ namespace StateSpaceSearch
         {
             neighbors.Add(cityNode);
             distances.Add(distance);
-        }
-
-        //return the neighbor list so that they can be added to the queue
-        public List<MapNode> getNeighbors()
-        {
-            return neighbors;
+            numBranches++;
         }
 
         //Return string returns the cityName. This is used by the combo box to display the objects
@@ -59,5 +68,53 @@ namespace StateSpaceSearch
             throw new ArgumentException("Object is not a Map Node");
         }
 
+        //Everything below here is so that two map nodes can be compared consistently
+        //see https://docs.microsoft.com/en-us/dotnet/api/system.iequatable-1.equals?view=netcore-3.1
+        public bool Equals(MapNode other)
+        {
+            if(other == null)
+            {
+                return false;
+            }
+            if (this.cityName == other.CityName)
+            {
+                return true;
+            }
+            else
+                return false;
+        }
+
+        public override bool Equals(Object obj)
+        {
+            if (obj == null)
+                return false;
+
+            MapNode MapNodeObj = obj as MapNode;
+            if (MapNodeObj == null)
+                return false;
+            else
+                return Equals(MapNodeObj);
+        }
+
+        public override int GetHashCode()
+        {
+            return this.CityName.GetHashCode();
+        }
+
+        public static bool operator ==(MapNode MapNode1, MapNode MapNode2)
+        {
+            if (((object)MapNode1) == null || ((object)MapNode2) == null)
+                return Object.Equals(MapNode1, MapNode2);
+
+            return MapNode1.Equals(MapNode2);
+        }
+
+        public static bool operator !=(MapNode MapNode1, MapNode MapNode2)
+        {
+            if (((object)MapNode1) == null || ((object)MapNode2) == null)
+                return !Object.Equals(MapNode1, MapNode2);
+
+            return !(MapNode1.Equals(MapNode2));
+        }
     }
 }

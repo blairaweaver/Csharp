@@ -7,15 +7,22 @@ namespace StateSpaceSearch
     public class LinkedTree
     {
         private LinkedTreeNode root;
+        public LinkedTreeNode Root
+        {
+            get { return root; }
+        }
         public LinkedTree(MapNode node)
         {
             root = new LinkedTreeNode(null, node);
         }
 
+        //create a new node and tell the parent that it has a new child
         //will return the new linkedtreenode so that the search function can delete the node later if there is a loop
         public LinkedTreeNode AddNode(LinkedTreeNode parent, MapNode newLeaf)
         {
-            return new LinkedTreeNode(parent, newLeaf);
+            LinkedTreeNode treeNode = new LinkedTreeNode(parent, newLeaf);
+            parent.AddChildNode(treeNode);
+            return treeNode;
         }
 
         public void RemoveNode(LinkedTreeNode node)
@@ -29,14 +36,18 @@ namespace StateSpaceSearch
         //In the first call to this, give the parent node and the new node
         public Boolean IsALoop(LinkedTreeNode currentNode, LinkedTreeNode nodeToMatch)
         {
-            if(currentNode == root)
+            //if we are at the root, just return if they match or not
+            //root.Equals(currentNode)
+            if (currentNode == root) //old code: currentNode == root (didn't work)
             {
                 return currentNode == nodeToMatch;
             }
-            if (currentNode == nodeToMatch)
+            //if we have a match, return true and don't continue
+            if (currentNode == nodeToMatch) //NEED TO CHECK IF THIS WORKS!!!
             {
                 return true;
             }
+            //if not at root and don't have a match, check the parent
             else
             {
                 return IsALoop(currentNode.GetParent(), nodeToMatch);

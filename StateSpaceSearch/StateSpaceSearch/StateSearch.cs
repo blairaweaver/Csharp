@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace StateSpaceSearch
@@ -31,27 +32,145 @@ namespace StateSpaceSearch
             this.startCity = startCity;
             this.destCity = endCity;
             this.output = output;
-            //Initialize the queue
-            nodes = new Stack<LinkedTreeNode>();
             //Initialize the tree
             tree = new LinkedTree(startCity);
+            //Initialize the queue and add start city
+            nodes = new Stack<LinkedTreeNode>();
+            nodes.Push(tree.Root);
+
         }
         public void Search()
         {
-            for(int i = 0; i < 100; i++)
+            //set the goal node to null at the beginning of each search
+            LinkedTreeNode goalNode = null;
+
+            //continue until queue is empty
+            while (nodes.Count != 0)
             {
-                output.UpdateText("This is a test from Depth First. Did this come before of after the window appeared?");
+                //create the string output. Having it in the loop will clear it after each step
+                string treeOutput = "";
+                //need to add the queue to the output
+                treeOutput += "Queue at start" + Environment.NewLine + "Front   ";
+                foreach(LinkedTreeNode ln in nodes)
+                {
+                    treeOutput += ln.ToString() + "   ";
+                }
+                treeOutput += "   End" + Environment.NewLine + Environment.NewLine;
+                //create a list to keep track of newly created linked list nodes that may be removed
+                //I would prefer to just check nodes when made, but for the professor's output,
+                //all nodes will be added and then check for loops
+                List<LinkedTreeNode> newlyCreatedNodes = new List<LinkedTreeNode>();
+
+                //get a linked tree node from the queue
+                LinkedTreeNode workingNode = nodes.Pop();
+
+                //Add the updated queue to the output
+                treeOutput += "Queue after taking an element" + Environment.NewLine + "Front   ";
+                foreach (LinkedTreeNode ln in nodes)
+                {
+                    treeOutput += ln.ToString() + "   ";
+                }
+                treeOutput += "   End" + Environment.NewLine + Environment.NewLine;
+
+                //get the neighbors
+                List<MapNode> neighborList = workingNode.GetMapNode().Neighbors;
+
+                //start creating the next line of output
+                //which will show what the node we pulled from the queue
+                //And all nodes that are attached to it
+                treeOutput += workingNode.ToString() + "(";
+
+                //make a new linked tree node for each neighbor
+                foreach(MapNode mn in neighborList)
+                {
+                    newlyCreatedNodes.Add(tree.AddNode(workingNode, mn));
+                    treeOutput += mn.ToString() + ", ";
+                }
+                //remove the last comma that was added
+                treeOutput = treeOutput.Remove(treeOutput.Length - 2);
+                treeOutput += ")" + Environment.NewLine;
+
+                //check to see if there are any loops
+                //can't use foreach since that doesn't allow you to modify the list
+                for(int i = 0; i < newlyCreatedNodes.Count; i++)
+                {
+                    //pass the parent node and one of the nodes that was just created
+                    if (tree.IsALoop(workingNode, newlyCreatedNodes[i]))
+                    {
+                        //remove the node from tree and list since it is a loop
+                        //I do both since I will use the list for the text output
+                        //and the tree for the graphical output
+                        tree.RemoveNode(newlyCreatedNodes[i]);
+                        newlyCreatedNodes.Remove(newlyCreatedNodes[i]);
+                        i--;
+                    }
+                }
+                //add a new line to the output to show the changes
+                //will also add the nodes to the queue now
+                treeOutput += workingNode.ToString() + "(";
+                foreach (LinkedTreeNode ln in newlyCreatedNodes)
+                {
+                    treeOutput += ln.ToString() + ", ";
+                    nodes.Push(ln);
+                    //check to see if we found the destination
+                    if(destCity == ln.GetMapNode())
+                    {
+                        goalNode = ln;
+                    }
+                }
+                //If there was nothing in the list, then we shouldn't remove stuff
+                if(newlyCreatedNodes.Count != 0)
+                {
+                    //remove the last comma that was added
+                    treeOutput = treeOutput.Remove(treeOutput.Length - 2);
+                }
+                treeOutput += ")" + Environment.NewLine + Environment.NewLine;
+
+                //send the output after each step
+                output.UpdateText(treeOutput);
+
+                //if we found the goal
+                if(goalNode != null)
+                {
+                    PrintPath(goalNode);
+                    break;
+                    //need to break from the while loop
+                    //need to print path
+                }
             }
-            //output.UpdateText("This is a test from Depth First. Did this come before of after the window appeared?");
         }
 
-        private void UpdateOutput()
+        //function to build the string and aend it to the output
+        private void PrintPath(LinkedTreeNode goal)
         {
+            //create string builder (this will allow us to add to the beginning
+            StringBuilder outputString = new StringBuilder();
 
+            //get the path
+            FindPath(outputString, goal);
+
+            //Add a bit of text at the beginning
+            outputString.Insert(0, "The Path is:" + Environment.NewLine);
+
+            //send the output
+            output.UpdateText(outputString.ToString());
+        }
+
+        //recursive function to get the path
+        private void FindPath(StringBuilder output, LinkedTreeNode treeNode)
+        {
+            if(treeNode.GetParent() == null)
+            {
+                output.Insert(0, treeNode.ToString());
+            }
+            else
+            {
+                output.Insert(0, "-" + treeNode.ToString());
+                FindPath(output, treeNode.GetParent());
+            }
         }
 
 
-        
     }
 
     public class AStarSearch : StateSearch
@@ -85,13 +204,37 @@ namespace StateSpaceSearch
         }
         public void Search()
         {
-            for (int i = 0; i < 100; i++)
-                output.UpdateText("This is a test. Did this come before of after the window appeared?");
+
         }
 
-        private void UpdateOutput()
+        //function to build the string and aend it to the output
+        private void PrintPath(LinkedTreeNode goal)
         {
+            //create string builder (this will allow us to add to the beginning
+            StringBuilder outputString = new StringBuilder();
 
+            //get the path
+            FindPath(outputString, goal);
+
+            //Add a bit of text at the beginning
+            outputString.Insert(0, "The Path is:" + Environment.NewLine);
+
+            //send the output
+            output.UpdateText(outputString.ToString());
+        }
+
+        //recursive function to get the path
+        private void FindPath(StringBuilder output, LinkedTreeNode treeNode)
+        {
+            if (treeNode.GetParent() == null)
+            {
+                output.Insert(0, treeNode.ToString());
+            }
+            else
+            {
+                output.Insert(0, "-" + treeNode.ToString());
+                FindPath(output, treeNode.GetParent());
+            }
         }
 
         //method to create distance graph. This goes from the dest and works out
@@ -112,7 +255,7 @@ namespace StateSpaceSearch
             distanceGraphNodes.Add(destCity);
             distanceGraphValues.Add(0);
             //add start city's neighbors to queue. Don't have to check for duplicates yet
-            foreach (MapNode m in destCity.getNeighbors())
+            foreach (MapNode m in destCity.Neighbors)
             {
                 myQ.Enqueue(m);
             }
@@ -122,7 +265,7 @@ namespace StateSpaceSearch
                 //get next node
                 MapNode workingNode = myQ.Dequeue();
                 //get the neighbors of that node
-                List<MapNode> workingNeighbors = workingNode.getNeighbors();
+                List<MapNode> workingNeighbors = workingNode.Neighbors;
 
                 //if working node is neighbor to destination, just add values
                 if (workingNode.isNeighbor(destCity))

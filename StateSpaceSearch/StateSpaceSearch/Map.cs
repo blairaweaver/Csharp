@@ -21,6 +21,24 @@ namespace StateSpaceSearch
             Array.Sort(nodes);
         }
 
+        public int getMaxConnections()
+        {
+            //create the int and set to zero
+            int maxConnections = 0;
+
+            //go through the nodes and see if it has more connections that the previous
+            foreach(MapNode mn in nodes)
+            {
+                if(mn.NumbBranches > maxConnections)
+                {
+                    maxConnections = mn.NumbBranches;
+                }
+            }
+
+            //return the maxiumum number of connections
+            return maxConnections;
+        }
+
         //create the nodes and add them to the array
         private void createNodes()
         {
