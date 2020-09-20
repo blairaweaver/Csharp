@@ -9,6 +9,7 @@ namespace StateSpaceSearch
         private LinkedTreeNode parentNode;
         private List<LinkedTreeNode> childNodes;
         private MapNode mapNodeEquilvalent;
+        private int distanceToRoot;
 
         public LinkedTreeNode(LinkedTreeNode parent, MapNode m)
         {
@@ -49,7 +50,7 @@ namespace StateSpaceSearch
             {
                 return this.mapNodeEquilvalent.CompareTo((obj as LinkedTreeNode).mapNodeEquilvalent);
             }
-            throw new ArgumentException("Object is not a Map Node");
+            throw new ArgumentException("Object is not a Linked Tree Node");
         }
 
         //Everything below here is so that two map nodes can be compared consistently

@@ -13,7 +13,6 @@ namespace StateSpaceSearch
 
     }
 
-    //
     public class DepthFirstSearch : StateSearch
     {
 
@@ -107,6 +106,7 @@ namespace StateSpaceSearch
                 }
                 //add a new line to the output to show the changes
                 //will also add the nodes to the queue now
+                treeOutput += "After rejecting Loops" + Environment.NewLine;
                 treeOutput += workingNode.ToString() + "(";
                 foreach (LinkedTreeNode ln in newlyCreatedNodes)
                 {
@@ -132,10 +132,10 @@ namespace StateSpaceSearch
                 //if we found the goal
                 if(goalNode != null)
                 {
-                    PrintPath(goalNode);
-                    break;
                     //need to break from the while loop
                     //need to print path
+                    PrintPath(goalNode);
+                    break;
                 }
             }
         }
@@ -188,6 +188,7 @@ namespace StateSpaceSearch
         OutputForm output;
         //will need custom queue
         //queue needs to sort at the end by distance
+        AStarQueue nodes;
         public AStarSearch(MapNode startCity, MapNode endCity, OutputForm output)
         {
             this.startCity = startCity;
@@ -198,15 +199,164 @@ namespace StateSpaceSearch
             distanceGraphValues = new List<int>();
             //Create the distance Graph
             createDistanceGraph();
+            //send the distance graph to the output
+            output.CreateDistanceTable(distanceGraphNodes, distanceGraphValues);
             //Initialize the tree
             tree = new LinkedTree(startCity);
             //Initialize the queue
+            nodes = new AStarQueue(tree.Root);
         }
         public void Search()
         {
+            //set the goal node to null at the beginning of each search
+            LinkedTreeNode goalNode = null;
+            //this is the distance traveled by the goal node so this doesn't have to be calculated over and over again
+            //set to max value for start
+            int goalDistance = int.MaxValue;
 
+            //continue until queue is empty
+            while (nodes.Count() != 0)
+            {
+                //initialize the string for each step
+                string treeOutput = "";
+
+                //add the queue to the output
+                treeOutput += "Queue at start" + Environment.NewLine + "Front   ";
+                foreach(LinkedTreeNode ln in nodes)
+                {
+                    treeOutput += ln.ToString() + "   ";
+                }
+                treeOutput += "End" + Environment.NewLine + Environment.NewLine;
+
+                //create a list to keep track of newly created linked list nodes that may be removed
+                List<LinkedTreeNode> newlyCreatedNodes = new List<LinkedTreeNode>();
+
+                //get a linked tree node from the queue
+                LinkedTreeNode workingNode = nodes.Pop();
+
+                //get out of the loop at this point, because this means we have found the shortest route
+                if(tree.DistanceTraveled(workingNode) >= goalDistance)
+                {
+                    break;
+                }
+
+                //Add the updated queue to the output
+                treeOutput += "Queue after taking an element" + Environment.NewLine + "Front   ";
+                foreach (LinkedTreeNode ln in nodes)
+                {
+                    treeOutput += ln.ToString() + "   ";
+                }
+                treeOutput += "End" + Environment.NewLine + Environment.NewLine;
+
+                //get the neighbors
+                List<MapNode> neighborList = workingNode.GetMapNode().Neighbors;
+
+                //start creating the next line of output
+                //which will show what the node we pulled from the queue
+                //And all nodes that are attached to it
+                treeOutput += workingNode.ToString() + "(";
+
+                //make a new linked tree node for each neighbor
+                foreach (MapNode mn in neighborList)
+                {
+                    newlyCreatedNodes.Add(tree.AddNode(workingNode, mn));
+                    treeOutput += mn.ToString() + ", ";
+                }
+                //remove the last comma that was added
+                treeOutput = treeOutput.Remove(treeOutput.Length - 2);
+                treeOutput += ")" + Environment.NewLine;
+
+                //REMOVE LOOPS HERE
+                //check to see if there are any loops
+                //can't use foreach since that doesn't allow you to modify the list
+                for (int i = 0; i < newlyCreatedNodes.Count; i++)
+                {
+                    //pass the parent node and one of the nodes that was just created
+                    if (tree.IsALoop(workingNode, newlyCreatedNodes[i]))
+                    {
+                        //remove the node from tree and list since it is a loop
+                        //I do both since I will use the list for the text output
+                        //and the tree for the graphical output
+                        tree.RemoveNode(newlyCreatedNodes[i]);
+                        newlyCreatedNodes.Remove(newlyCreatedNodes[i]);
+                        i--;
+                    }
+                }
+                //create a list to hold the distances so they aren't calculated twice
+                List<int> tempDist = new List<int>();
+                //Add a line showing the nodes and the calculated distances
+                //also add them to the queueu
+                treeOutput += "After rejecting Loops" + Environment.NewLine;
+                treeOutput += workingNode.ToString() + "(";
+                for(int i = 0; i < newlyCreatedNodes.Count; i++)
+                {
+
+                    tempDist.Add(GetDistance(newlyCreatedNodes[i]));
+                    treeOutput += newlyCreatedNodes[i].ToString() + ":" + tempDist[i]+ ", ";
+
+                    //adding 
+                    nodes.Add(newlyCreatedNodes[i], tempDist[i]);
+                    //also check to see if we hit the goal
+                    if (destCity == newlyCreatedNodes[i].GetMapNode())
+                    {
+                        //check and see if the distance travaled to this nodes is shorter than what we already have
+                        //this can be more, because the distance we check above is for the parent.
+                        if (tempDist[i] < goalDistance)
+                        {
+                            //update the goal node with the new tree node
+                            goalNode = newlyCreatedNodes[i];
+                            //update the distance that we used to get here
+                            goalDistance = tempDist[i];
+                        }
+                    }
+                }
+                //If there was nothing in the list, then we shouldn't remove stuff
+                if (newlyCreatedNodes.Count != 0)
+                {
+                    //remove the last comma that was added
+                    treeOutput = treeOutput.Remove(treeOutput.Length - 2);
+                }
+                treeOutput += ")" + Environment.NewLine;
+
+                //Show Updated Queue
+                //Add the updated queue to the output
+                treeOutput += "Queue after adding elements" + Environment.NewLine + "Front   ";
+                foreach (LinkedTreeNode ln in nodes)
+                {
+                    treeOutput += ln.ToString() + "   ";
+                }
+                treeOutput += "End" + Environment.NewLine + Environment.NewLine;
+
+                //Remove Duplicates
+                nodes.RemoveDuplicates();
+
+                //show the queue after removing duplicates
+                //Add the updated queue to the output
+                treeOutput += "Queue after removing duplicate elements" + Environment.NewLine + "Front   ";
+                foreach (LinkedTreeNode ln in nodes)
+                {
+                    treeOutput += ln.ToString() + "   ";
+                }
+                treeOutput += "End" + Environment.NewLine + Environment.NewLine;
+
+                //send the output after each step
+                output.UpdateText(treeOutput);
+            }
+
+            //we are out of the while loop
+            //check to see if there is a goal node
+            //if so, then print the path
+            if (goalNode != null)
+            {
+                PrintPath(goalNode);
+            }
         }
 
+        //This returns the distance. Helps get the code cleaner
+        private int GetDistance(LinkedTreeNode linkedTreeNode)
+        {
+            return distanceGraphValues[distanceGraphNodes.IndexOf(linkedTreeNode.GetMapNode())] + tree.DistanceTraveled(linkedTreeNode);
+        }
         //function to build the string and aend it to the output
         private void PrintPath(LinkedTreeNode goal)
         {

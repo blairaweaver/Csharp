@@ -49,9 +49,24 @@ namespace StateSpaceSearch
         }
 
         //this will create a table for the distance graph
-        public void CreateDistanceTable()
+        public void CreateDistanceTable(List<MapNode> mapNodes, List<int> distances)
         {
+            //initialiaze the output string
+            string outputString = "";
 
+            //create the header
+            outputString += String.Format("|{0,-16}|{1,-12}|", "Node", "Distance");
+            outputString += Environment.NewLine;
+
+            //add each of the nodes and the distances
+            for(int i = 0; i < mapNodes.Count; i++)
+            {
+                outputString += String.Format("|{0,-16}|{1,-12}|", mapNodes[i].CityName, distances[i]);
+                outputString += Environment.NewLine;
+            }
+
+            outputString += Environment.NewLine;
+            UpdateText(outputString);
         }
 
         //This will draw the Map

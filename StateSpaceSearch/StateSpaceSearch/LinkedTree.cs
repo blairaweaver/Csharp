@@ -53,5 +53,21 @@ namespace StateSpaceSearch
                 return IsALoop(currentNode.GetParent(), nodeToMatch);
             }
         }
+
+        public int DistanceToParent(LinkedTreeNode treeNode)
+        {
+            return treeNode.GetMapNode().distanceTo(treeNode.GetParent().GetMapNode());
+        }
+        public int DistanceTraveled(LinkedTreeNode treeNode)
+        {
+            if (treeNode == root)
+            {
+                return 0;
+            }
+            else
+            {
+                return DistanceToParent(treeNode) + DistanceTraveled(treeNode.GetParent());
+            }
+        }
     }
 }
