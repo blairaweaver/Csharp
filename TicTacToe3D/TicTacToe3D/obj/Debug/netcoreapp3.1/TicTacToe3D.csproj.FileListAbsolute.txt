@@ -13,3 +13,4 @@ C:\Users\blair\source\repos\Csharp\TicTacToe3D\TicTacToe3D\obj\Debug\netcoreapp3
 C:\Users\blair\source\repos\Csharp\TicTacToe3D\TicTacToe3D\obj\Debug\netcoreapp3.1\TicTacToe3D.dll
 C:\Users\blair\source\repos\Csharp\TicTacToe3D\TicTacToe3D\obj\Debug\netcoreapp3.1\TicTacToe3D.pdb
 C:\Users\blair\source\repos\Csharp\TicTacToe3D\TicTacToe3D\obj\Debug\netcoreapp3.1\TicTacToe3D.genruntimeconfig.cache
+C:\Users\blair\source\repos\Csharp\TicTacToe3D\TicTacToe3D\obj\Debug\netcoreapp3.1\TicTacToe3D.NewGame.resources
