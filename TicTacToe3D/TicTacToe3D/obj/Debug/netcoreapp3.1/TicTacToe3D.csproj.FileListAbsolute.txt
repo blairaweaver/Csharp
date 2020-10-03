@@ -1,0 +1,15 @@
+C:\Users\blair\source\repos\Csharp\TicTacToe3D\TicTacToe3D\bin\Debug\netcoreapp3.1\TicTacToe3D.exe
+C:\Users\blair\source\repos\Csharp\TicTacToe3D\TicTacToe3D\bin\Debug\netcoreapp3.1\TicTacToe3D.deps.json
+C:\Users\blair\source\repos\Csharp\TicTacToe3D\TicTacToe3D\bin\Debug\netcoreapp3.1\TicTacToe3D.runtimeconfig.json
+C:\Users\blair\source\repos\Csharp\TicTacToe3D\TicTacToe3D\bin\Debug\netcoreapp3.1\TicTacToe3D.runtimeconfig.dev.json
+C:\Users\blair\source\repos\Csharp\TicTacToe3D\TicTacToe3D\bin\Debug\netcoreapp3.1\TicTacToe3D.dll
+C:\Users\blair\source\repos\Csharp\TicTacToe3D\TicTacToe3D\bin\Debug\netcoreapp3.1\TicTacToe3D.pdb
+C:\Users\blair\source\repos\Csharp\TicTacToe3D\TicTacToe3D\obj\Debug\netcoreapp3.1\TicTacToe3D.csprojAssemblyReference.cache
+C:\Users\blair\source\repos\Csharp\TicTacToe3D\TicTacToe3D\obj\Debug\netcoreapp3.1\TicTacToe3D.tictactoeForm.resources
+C:\Users\blair\source\repos\Csharp\TicTacToe3D\TicTacToe3D\obj\Debug\netcoreapp3.1\TicTacToe3D.csproj.GenerateResource.cache
+C:\Users\blair\source\repos\Csharp\TicTacToe3D\TicTacToe3D\obj\Debug\netcoreapp3.1\TicTacToe3D.AssemblyInfoInputs.cache
+C:\Users\blair\source\repos\Csharp\TicTacToe3D\TicTacToe3D\obj\Debug\netcoreapp3.1\TicTacToe3D.AssemblyInfo.cs
+C:\Users\blair\source\repos\Csharp\TicTacToe3D\TicTacToe3D\obj\Debug\netcoreapp3.1\TicTacToe3D.csproj.CoreCompileInputs.cache
+C:\Users\blair\source\repos\Csharp\TicTacToe3D\TicTacToe3D\obj\Debug\netcoreapp3.1\TicTacToe3D.dll
+C:\Users\blair\source\repos\Csharp\TicTacToe3D\TicTacToe3D\obj\Debug\netcoreapp3.1\TicTacToe3D.pdb
+C:\Users\blair\source\repos\Csharp\TicTacToe3D\TicTacToe3D\obj\Debug\netcoreapp3.1\TicTacToe3D.genruntimeconfig.cache

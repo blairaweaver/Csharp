@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "4UrgzUse8Yp6vV1RKK0TwnJJftLygNdQpeb4RPA/xbVpfLGAzYMTUZsfVTT5R3K7tMzwH+a73d1SSMkHzRV1aQ==",
+  "dgSpecHash": "goWnTpt9bLRtR8s7qrTiIIEUColoIT673yCad6Efjx/QiDKEweJ/xFyUH+qpZe+j/0sw3QDv6DPNIlUyG038tQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\blair\\Source\\Repos\\Csharp\\MyPacketCapturer\\MyPacketCapturer\\MyPacketCapturer.csproj",
+  "projectFilePath": "C:\\Users\\blair\\source\\repos\\Csharp\\MyPacketCapturer\\MyPacketCapturer\\MyPacketCapturer.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\blair\\.nuget\\packages\\packetdotnet\\1.0.5\\packetdotnet.1.0.5.nupkg.sha512",
     "C:\\Users\\blair\\.nuget\\packages\\sharppcap\\5.2.0\\sharppcap.5.2.0.nupkg.sha512",
