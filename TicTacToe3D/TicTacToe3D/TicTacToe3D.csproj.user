@@ -4,7 +4,13 @@
     <Compile Update="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="HelpDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="NewGame.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="WinnerDialog.cs">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>

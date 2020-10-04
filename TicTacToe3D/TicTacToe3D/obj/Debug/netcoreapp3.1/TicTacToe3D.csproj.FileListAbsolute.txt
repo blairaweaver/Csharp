@@ -14,3 +14,5 @@ C:\Users\blair\source\repos\Csharp\TicTacToe3D\TicTacToe3D\obj\Debug\netcoreapp3
 C:\Users\blair\source\repos\Csharp\TicTacToe3D\TicTacToe3D\obj\Debug\netcoreapp3.1\TicTacToe3D.pdb
 C:\Users\blair\source\repos\Csharp\TicTacToe3D\TicTacToe3D\obj\Debug\netcoreapp3.1\TicTacToe3D.genruntimeconfig.cache
 C:\Users\blair\source\repos\Csharp\TicTacToe3D\TicTacToe3D\obj\Debug\netcoreapp3.1\TicTacToe3D.NewGame.resources
+C:\Users\blair\source\repos\Csharp\TicTacToe3D\TicTacToe3D\obj\Debug\netcoreapp3.1\TicTacToe3D.HelpDialog.resources
+C:\Users\blair\source\repos\Csharp\TicTacToe3D\TicTacToe3D\obj\Debug\netcoreapp3.1\TicTacToe3D.WinnerDialog.resources
