@@ -101,36 +101,64 @@ namespace TicTacToe3D
             }
         }
 
+        private string GetAIMark()
+        {
+            if (!humanPlayerOne)
+            {
+                return playerOneMark;
+            }
+            else
+            {
+                return playerTwoMark;
+            }
+        }
+
         //This will check to see if there is a winner
         //since this is run after every turn, only have to check those around that spot
         //All check methods are at the end of this file
-        private bool CheckForWinner(int board, int row, int column)
+        public static bool CheckForWinner(String[,,] gameBoard, int board, int row, int column)
         {
             String mark = gameBoard[board, row, column];
             //check the row for 3 in a row
-            if(1 + CheckRow(board, row, column - 1, -1, mark) + CheckRow(board, row, column + 1, 1, mark) == 3)
+            if (1 + CheckRow(gameBoard, board, row, column - 1, -1, mark) + CheckRow(gameBoard, board, row, column + 1, 1, mark) == 3)
             {
                 return true;
             }
             //check the column
-            if (1 + CheckColumn(board, row - 1, column, -1, mark) + CheckColumn(board, row + 1, column, 1, mark) == 3)
+            if (1 + CheckColumn(gameBoard, board, row - 1, column, -1, mark) + CheckColumn(gameBoard, board, row + 1, column, 1, mark) == 3)
             {
                 return true;
             }
             //check the top left to bottom right diagnoal (called left diagonal)
-            if (1 + CheckLeftDiagonal(board, row - 1, column - 1, -1, mark) + CheckLeftDiagonal(board, row + 1, column + 1, 1, mark) == 3)
+            if (1 + CheckLeftDiagonal(gameBoard, board, row - 1, column - 1, -1, mark) + CheckLeftDiagonal(gameBoard, board, row + 1, column + 1, 1, mark) == 3)
             {
                 return true;
             }
             //check the bottom left to top right diagonal(called right diagonal)
-            if (1 + CheckRightDiagonal(board, row + 1, column - 1, -1, mark) + CheckRightDiagonal(board, row - 1, column + 1, 1, mark) == 3)
+            if (1 + CheckRightDiagonal(gameBoard, board, row + 1, column - 1, -1, mark) + CheckRightDiagonal(gameBoard, board, row - 1, column + 1, 1, mark) == 3)
             {
                 return true;
             }
             //check 3D space
             //check 3D row
+            if (1 + CheckRow3D(gameBoard, board - 1, row, column - 1, -1, mark) + CheckRow3D(gameBoard, board + 1, row, column + 1, 1, mark) == 3)
+            {
+                return true;
+            }
             //check 3D column
+            if (1 + CheckColumn3D(gameBoard, board - 1, row - 1, column, -1, mark) + CheckColumn3D(gameBoard, board + 1, row + 1, column, 1, mark) == 3)
+            {
+                return true;
+            }
             //check 3D diagonal
+            if (1 + CheckLeftDiagonal3D(gameBoard, board - 1, row - 1, column - 1, -1, mark) + CheckLeftDiagonal3D(gameBoard, board + 1, row + 1, column + 1, 1, mark) == 3)
+            {
+                return true;
+            }
+            if (1 + CheckRightDiagonal3D(gameBoard, board - 1, row + 1, column - 1, -1, mark) + CheckRightDiagonal3D(gameBoard, board + 1, row - 1, column + 1, 1, mark) == 3)
+            {
+                return true;
+            }
             //Placeholder
             return false;
         }
@@ -139,6 +167,13 @@ namespace TicTacToe3D
         private void AITurn()
         {
 
+
+            //check to see if AI Wins
+            //THIS HAS A TEMP BOARD POS! REPLACE
+            if(CheckForWinner(gameBoard, 0,0,0))
+            {
+                ShowWinningDialog(true);
+            }
 
             //at the end, switch back to human
             humanTurn = true;
@@ -171,7 +206,7 @@ namespace TicTacToe3D
                 }
 
                 //check to see if there is a win
-                if(CheckForWinner(board, row, column))
+                if(CheckForWinner(gameBoard, board, row, column))
                 {
                     ShowWinningDialog(true);
                 }
@@ -214,74 +249,146 @@ namespace TicTacToe3D
         //These methods work by using recursion and return how many marks there are in that direction
 
         //This method is for a row in 2D space
-        private int CheckRow(int board, int row, int column, int dir, String mark)
+        private static int CheckRow(String[,,] gameboard, int board, int row, int column, int dir, String mark)
         {
             //check to see if out of bounds
             if(column < 0 || column > 2)
             {
                 return 0;
             }
-            if(gameBoard[board, row, column] != mark)
+            if(gameboard[board, row, column] != mark)
             {
                 return 0;
             }
             //make sure the next spot in that direction is on the board
             else
             {
-                return 1 + CheckRow(board, row, column + dir, dir, mark);
+                return 1 + CheckRow(gameboard, board, row, column + dir, dir, mark);
             }
         }
 
         //This method is for a column in 2D space
-        private int CheckColumn(int board, int row, int column, int dir, String mark)
+        private static int CheckColumn(String[,,] gameboard, int board, int row, int column, int dir, String mark)
         {
             //check to see if out of bounds
             if (row < 0 || row > 2)
             {
                 return 0;
             }
-            if (gameBoard[board, row, column] != mark)
+            if (gameboard[board, row, column] != mark)
             {
                 return 0;
             }
             else
             {
-                return 1 + CheckColumn(board, row + dir, column, dir, mark);
+                return 1 + CheckColumn(gameboard, board, row + dir, column, dir, mark);
             }
         }
 
         //Next two methods is for a diagonals in 2D space
-        private int CheckLeftDiagonal(int board, int row, int column, int dir, String mark)
+        private static int CheckLeftDiagonal(String[,,] gameboard, int board, int row, int column, int dir, String mark)
         {
             //check to see if out of bounds
             if (row < 0 || row > 2 || column < 0 || column > 2)
             {
                 return 0;
             }
-            if (gameBoard[board, row, column] != mark)
+            if (gameboard[board, row, column] != mark)
             {
                 return 0;
             }
             else
             {
-                return 1 + CheckLeftDiagonal(board, row + dir, column + dir, dir, mark);
+                return 1 + CheckLeftDiagonal(gameboard, board, row + dir, column + dir, dir, mark);
             }
         }
 
-        private int CheckRightDiagonal(int board, int row, int column, int dir, String mark)
+        private static int CheckRightDiagonal(String[,,] gameboard, int board, int row, int column, int dir, String mark)
         {
             //check to see if out of bounds
             if (row < 0 || row > 2 || column < 0 || column > 2)
             {
                 return 0;
             }
-            if (gameBoard[board, row, column] != mark)
+            if (gameboard[board, row, column] != mark)
             {
                 return 0;
             }
             else
             {
-                return 1 + CheckRightDiagonal(board, row - dir, column + dir, dir, mark);
+                return 1 + CheckRightDiagonal(gameboard, board, row - dir, column + dir, dir, mark);
+            }
+        }
+
+        //this check rows in 3D space
+        private static int CheckRow3D(String[,,] gameboard, int board, int row, int column, int dir, String mark)
+        {
+            //check to see if out of bounds
+            if (column < 0 || column > 2 || board < 0 || board > 2)
+            {
+                return 0;
+            }
+            if (gameboard[board, row, column] != mark)
+            {
+                return 0;
+            }
+            //make sure the next spot in that direction is on the board
+            else
+            {
+                return 1 + CheckRow3D(gameboard, board + dir, row, column + dir, dir, mark);
+            }
+        }
+
+        //This method is for a column in 3D space
+        private static int CheckColumn3D(String[,,] gameboard, int board, int row, int column, int dir, String mark)
+        {
+            //check to see if out of bounds
+            if (row < 0 || row > 2 || board < 0 || board > 2)
+            {
+                return 0;
+            }
+            if (gameboard[board, row, column] != mark)
+            {
+                return 0;
+            }
+            else
+            {
+                return 1 + CheckColumn3D(gameboard, board + dir, row + dir, column, dir, mark);
+            }
+        }
+
+        //Next two methods is for a diagonals in 3D space
+        private static int CheckLeftDiagonal3D(String[,,] gameboard, int board, int row, int column, int dir, String mark)
+        {
+            //check to see if out of bounds
+            if (row < 0 || row > 2 || column < 0 || column > 2 || board < 0 || board > 2)
+            {
+                return 0;
+            }
+            if (gameboard[board, row, column] != mark)
+            {
+                return 0;
+            }
+            else
+            {
+                return 1 + CheckLeftDiagonal3D(gameboard, board + dir, row + dir, column + dir, dir, mark);
+            }
+        }
+
+        private static int CheckRightDiagonal3D(String[,,] gameboard, int board, int row, int column, int dir, String mark)
+        {
+            //check to see if out of bounds
+            if (row < 0 || row > 2 || column < 0 || column > 2 || board < 0 || board > 2)
+            {
+                return 0;
+            }
+            if (gameboard[board, row, column] != mark)
+            {
+                return 0;
+            }
+            else
+            {
+                return 1 + CheckRightDiagonal3D(gameboard, board + dir, row - dir, column + dir, dir, mark);
             }
         }
 
