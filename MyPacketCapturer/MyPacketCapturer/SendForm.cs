@@ -30,7 +30,7 @@ namespace MyPacketCapturer
             }
 
             //extract the hex values into a byte array
-            string[] sBytes = stringBytes.Split(new string[] { "\n", "\r\n", " " }, StringSplitOptions.RemoveEmptyEntries);
+            string[] sBytes = stringBytes.Split(new string[] { "\n", "\r\n", " ", "\t" }, StringSplitOptions.RemoveEmptyEntries);
 
             //change string to bytes
             byte[] packet = new byte[sBytes.Length];
@@ -40,17 +40,17 @@ namespace MyPacketCapturer
                 packet[i] = Convert.ToByte(s , 16);
                 i++;
 
-                //Sending out the packet
-                try
-                {
-                    PacketCaptureForm.device.SendPacket(packet);
-                }
-                catch(Exception exp)
-                {
-
-                }
-
             } //End btnSend
+
+            //Sending out the packet
+            try
+            {
+                PacketCaptureForm.device.SendPacket(packet);
+            }
+            catch (Exception exp)
+            {
+
+            }
         }
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -82,6 +82,7 @@ namespace MyPacketCapturer
             if (saveFileDialog1.FileName != "")
             {
                 System.IO.File.WriteAllText(saveFileDialog1.FileName, txtPacket.Text);
+                workingFilename = saveFileDialog1.FileName;
             }
         }
 
@@ -95,6 +96,7 @@ namespace MyPacketCapturer
             if (openFileDialog1.FileName != "")
             {
                 txtPacket.Text = System.IO.File.ReadAllText(openFileDialog1.FileName);
+                workingFilename = openFileDialog1.FileName;
             }
         }
 
