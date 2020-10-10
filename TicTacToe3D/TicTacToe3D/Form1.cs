@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -26,9 +27,10 @@ namespace TicTacToe3D
         public tictactoeForm()
         {
             CreateGameArray();
+            InitializeComponent();
             NewGame ngdigl = new NewGame(this);
             ngdigl.ShowDialog();
-            InitializeComponent();
+
         }
 
         //this will create the 2D array to store the board. 
@@ -77,13 +79,13 @@ namespace TicTacToe3D
 
             //reset all the text boxes and the array
             CreateGameArray();
-            foreach (Control control in this.Controls)
+            foreach (Button button in this.Controls.OfType<Button>())
             {
-                if(control is Button)
-                {
-                    Button button = (Button)control;
-                    button.Text = "";
-                }
+                button.Text = "";
+            }
+            if(!playerOne)
+            {
+                AITurn();
             }
         }
 
@@ -113,11 +115,44 @@ namespace TicTacToe3D
             }
         }
 
+        //method to convert board square number to a move
+        private int[] ConvertBoardToMove(int boardSqaure)
+        {
+            int board = boardSqaure / 9;
+            int intermediate = boardSqaure % 9;
+            int row = intermediate / 3;
+            int column = intermediate % 3;
+
+            return new int[] { board, row, column };
+        }
+
+        //method to conver a move to a board square number
+        private Button ConvertMoveToBoard(int[] move)
+        {
+            //works in reverse of the other method
+            int buttonNum = (move[0] * 9) + (move[1]* 3) + move[2];
+            string buttonName = "BoardSquare" + buttonNum;
+
+            //find and return the button that matches
+            foreach(Button button in this.Controls.OfType<Button>())
+            {
+                if(button.Name == buttonName)
+                {
+                    return button;
+                }
+            }
+
+            return null;
+        }
+
         //This will check to see if there is a winner
         //since this is run after every turn, only have to check those around that spot
         //All check methods are at the end of this file
-        public static bool CheckForWinner(String[,,] gameBoard, int board, int row, int column)
+        public static bool CheckForWinner(String[,,] gameBoard, int[] move)
         {
+            int board = move[0];
+            int row = move[1];
+            int column = move[2];
             String mark = gameBoard[board, row, column];
             //check the row for 3 in a row
             if (1 + CheckRow(gameBoard, board, row, column - 1, -1, mark) + CheckRow(gameBoard, board, row, column + 1, 1, mark) == 3)
@@ -141,21 +176,37 @@ namespace TicTacToe3D
             }
             //check 3D space
             //check 3D row
-            if (1 + CheckRow3D(gameBoard, board - 1, row, column - 1, -1, mark) + CheckRow3D(gameBoard, board + 1, row, column + 1, 1, mark) == 3)
+            if (1 + CheckRow3DForward(gameBoard, board - 1, row, column - 1, -1, mark) + CheckRow3DForward(gameBoard, board + 1, row, column + 1, 1, mark) == 3)
+            {
+                return true;
+            }
+            if (1 + CheckRow3DBackward(gameBoard, board + 1, row, column - 1, -1, mark) + CheckRow3DBackward(gameBoard, board - 1, row, column + 1, 1, mark) == 3)
             {
                 return true;
             }
             //check 3D column
-            if (1 + CheckColumn3D(gameBoard, board - 1, row - 1, column, -1, mark) + CheckColumn3D(gameBoard, board + 1, row + 1, column, 1, mark) == 3)
+            if (1 + CheckColumn3DForward(gameBoard, board - 1, row - 1, column, -1, mark) + CheckColumn3DForward(gameBoard, board + 1, row + 1, column, 1, mark) == 3)
+            {
+                return true;
+            }
+            if (1 + CheckColumn3DBackward(gameBoard, board + 1, row - 1, column, -1, mark) + CheckColumn3DBackward(gameBoard, board - 1, row + 1, column, 1, mark) == 3)
             {
                 return true;
             }
             //check 3D diagonal
-            if (1 + CheckLeftDiagonal3D(gameBoard, board - 1, row - 1, column - 1, -1, mark) + CheckLeftDiagonal3D(gameBoard, board + 1, row + 1, column + 1, 1, mark) == 3)
+            if (1 + CheckLeftDiagonal3DForward(gameBoard, board - 1, row - 1, column - 1, -1, mark) + CheckLeftDiagonal3DForward(gameBoard, board + 1, row + 1, column + 1, 1, mark) == 3)
             {
                 return true;
             }
-            if (1 + CheckRightDiagonal3D(gameBoard, board - 1, row + 1, column - 1, -1, mark) + CheckRightDiagonal3D(gameBoard, board + 1, row - 1, column + 1, 1, mark) == 3)
+            if (1 + CheckRightDiagonal3DForward(gameBoard, board - 1, row + 1, column - 1, -1, mark) + CheckRightDiagonal3DForward(gameBoard, board + 1, row - 1, column + 1, 1, mark) == 3)
+            {
+                return true;
+            }
+            if (1 + CheckLeftDiagonal3DBackward(gameBoard, board - 1, row + 1, column + 1, -1, mark) + CheckLeftDiagonal3DBackward(gameBoard, board + 1, row - 1, column - 1, 1, mark) == 3)
+            {
+                return true;
+            }
+            if (1 + CheckRightDiagonal3DBackward(gameBoard, board - 1, row - 1, column + 1, -1, mark) + CheckRightDiagonal3DBackward(gameBoard, board + 1, row + 1, column - 1, 1, mark) == 3)
             {
                 return true;
             }
@@ -166,17 +217,29 @@ namespace TicTacToe3D
         //This will run the game tree & AI
         private void AITurn()
         {
+            //Create game tree
+            GameTree gameTree = new GameTree(gameBoard, humanPlayerOne);
 
+            int[] move = gameTree.GetMove();
+
+            gameBoard[move[0], move[1], move[2]] = GetAIMark();
+            Button button = ConvertMoveToBoard(move);
+            if(button != null)
+            {
+                button.Text = GetAIMark();
+            }
 
             //check to see if AI Wins
             //THIS HAS A TEMP BOARD POS! REPLACE
-            if(CheckForWinner(gameBoard, 0,0,0))
+            if (CheckForWinner(gameBoard, move))
             {
-                ShowWinningDialog(true);
+                ShowWinningDialog(false);
             }
-
-            //at the end, switch back to human
-            humanTurn = true;
+            else
+            {
+                //at the end, switch back to human
+                humanTurn = true;
+            }
         }
 
         //This is called when any of the buttons is selected.
@@ -193,27 +256,27 @@ namespace TicTacToe3D
                 String test = workingButton.Name.Substring(11);
                 int workingNum = Int16.Parse(test);
 
-                //just for clarity, show all calcs
-                int board = workingNum / 9;
-                int intermediate = workingNum % 9;
-                int row = intermediate / 3;
-                int column = intermediate % 3;
+                //get the move from the square clicked
+                int[] move = ConvertBoardToMove(workingNum);
 
                 if (workingButton.Text == "")
                 {
                     workingButton.Text = GetPlayerMark();
-                    gameBoard[board, row, column] = GetPlayerMark();
+                    //gameBoard[board, row, column] = GetPlayerMark();
+                    gameBoard[move[0], move[1], move[2]] = GetPlayerMark();
                 }
 
                 //check to see if there is a win
-                if(CheckForWinner(gameBoard, board, row, column))
+                if(CheckForWinner(gameBoard, move))
                 {
                     ShowWinningDialog(true);
                 }
-
-                //at the end, change to computer turn
-                humanTurn = false;
-                AITurn();
+                else
+                {
+                    //at the end, change to computer turn
+                    humanTurn = false;
+                    AITurn();
+                }
             }
             //might want to have a message saying it is the computer's turn
             else
@@ -320,8 +383,8 @@ namespace TicTacToe3D
             }
         }
 
-        //this check rows in 3D space
-        private static int CheckRow3D(String[,,] gameboard, int board, int row, int column, int dir, String mark)
+        //this check rows in 3D space in a left to right from top to bottom
+        private static int CheckRow3DForward(String[,,] gameboard, int board, int row, int column, int dir, String mark)
         {
             //check to see if out of bounds
             if (column < 0 || column > 2 || board < 0 || board > 2)
@@ -332,15 +395,32 @@ namespace TicTacToe3D
             {
                 return 0;
             }
-            //make sure the next spot in that direction is on the board
             else
             {
-                return 1 + CheckRow3D(gameboard, board + dir, row, column + dir, dir, mark);
+                return 1 + CheckRow3DForward(gameboard, board + dir, row, column + dir, dir, mark);
             }
         }
 
-        //This method is for a column in 3D space
-        private static int CheckColumn3D(String[,,] gameboard, int board, int row, int column, int dir, String mark)
+        //this check rows in 3D space this is from bottom to top in a left to right
+        private static int CheckRow3DBackward(String[,,] gameboard, int board, int row, int column, int dir, String mark)
+        {
+            //check to see if out of bounds
+            if (column < 0 || column > 2 || board < 0 || board > 2)
+            {
+                return 0;
+            }
+            if (gameboard[board, row, column] != mark)
+            {
+                return 0;
+            }
+            else
+            {
+                return 1 + CheckRow3DBackward(gameboard, board - dir, row, column + dir, dir, mark);
+            }
+        }
+
+        //This method is for a column in 3D space in a top to bottom from top board to bottom board
+        private static int CheckColumn3DForward(String[,,] gameboard, int board, int row, int column, int dir, String mark)
         {
             //check to see if out of bounds
             if (row < 0 || row > 2 || board < 0 || board > 2)
@@ -353,12 +433,30 @@ namespace TicTacToe3D
             }
             else
             {
-                return 1 + CheckColumn3D(gameboard, board + dir, row + dir, column, dir, mark);
+                return 1 + CheckColumn3DForward(gameboard, board + dir, row + dir, column, dir, mark);
             }
         }
 
-        //Next two methods is for a diagonals in 3D space
-        private static int CheckLeftDiagonal3D(String[,,] gameboard, int board, int row, int column, int dir, String mark)
+        //This method is for a column in 3D space in a top to bottom from bottom board to top board
+        private static int CheckColumn3DBackward(String[,,] gameboard, int board, int row, int column, int dir, String mark)
+        {
+            //check to see if out of bounds
+            if (row < 0 || row > 2 || board < 0 || board > 2)
+            {
+                return 0;
+            }
+            if (gameboard[board, row, column] != mark)
+            {
+                return 0;
+            }
+            else
+            {
+                return 1 + CheckColumn3DBackward(gameboard, board - dir, row + dir, column, dir, mark);
+            }
+        }
+
+        //Next four methods is for a diagonals in 3D space
+        private static int CheckLeftDiagonal3DForward(String[,,] gameboard, int board, int row, int column, int dir, String mark)
         {
             //check to see if out of bounds
             if (row < 0 || row > 2 || column < 0 || column > 2 || board < 0 || board > 2)
@@ -371,11 +469,11 @@ namespace TicTacToe3D
             }
             else
             {
-                return 1 + CheckLeftDiagonal3D(gameboard, board + dir, row + dir, column + dir, dir, mark);
+                return 1 + CheckLeftDiagonal3DForward(gameboard, board + dir, row + dir, column + dir, dir, mark);
             }
         }
 
-        private static int CheckRightDiagonal3D(String[,,] gameboard, int board, int row, int column, int dir, String mark)
+        private static int CheckRightDiagonal3DForward(String[,,] gameboard, int board, int row, int column, int dir, String mark)
         {
             //check to see if out of bounds
             if (row < 0 || row > 2 || column < 0 || column > 2 || board < 0 || board > 2)
@@ -388,7 +486,41 @@ namespace TicTacToe3D
             }
             else
             {
-                return 1 + CheckRightDiagonal3D(gameboard, board + dir, row - dir, column + dir, dir, mark);
+                return 1 + CheckRightDiagonal3DForward(gameboard, board + dir, row - dir, column + dir, dir, mark);
+            }
+        }
+
+        private static int CheckLeftDiagonal3DBackward(String[,,] gameboard, int board, int row, int column, int dir, String mark)
+        {
+            //check to see if out of bounds
+            if (row < 0 || row > 2 || column < 0 || column > 2 || board < 0 || board > 2)
+            {
+                return 0;
+            }
+            if (gameboard[board, row, column] != mark)
+            {
+                return 0;
+            }
+            else
+            {
+                return 1 + CheckLeftDiagonal3DBackward(gameboard, board + dir, row - dir, column - dir, dir, mark);
+            }
+        }
+
+        private static int CheckRightDiagonal3DBackward(String[,,] gameboard, int board, int row, int column, int dir, String mark)
+        {
+            //check to see if out of bounds
+            if (row < 0 || row > 2 || column < 0 || column > 2 || board < 0 || board > 2)
+            {
+                return 0;
+            }
+            if (gameboard[board, row, column] != mark)
+            {
+                return 0;
+            }
+            else
+            {
+                return 1 + CheckRightDiagonal3DBackward(gameboard, board + dir, row + dir, column - dir, dir, mark);
             }
         }
 

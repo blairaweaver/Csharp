@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
 
 namespace TicTacToe3D
@@ -10,9 +11,9 @@ namespace TicTacToe3D
         const String playerOneMark = "X";
         const String playerTwoMark = "O";
         bool humanPlayerOne;
-        GameTree(String[,,] gameboard, bool humanPlayerOne)
+        public GameTree(String[,,] gameboard, bool humanPlayerOne)
         {
-            root = new GameTreeNode(gameboard, this);
+            root = new GameTreeNode((String[,,]) gameboard.Clone(), this);
             this.humanPlayerOne = humanPlayerOne;
         }
 
@@ -39,6 +40,11 @@ namespace TicTacToe3D
                 return playerTwoMark;
             }
         }
+
+        public int[] GetMove()
+        {
+            return root.NextMove;
+        }
         internal class GameTreeNode
         {
             //this is a node for the tree. It will store 
@@ -51,18 +57,24 @@ namespace TicTacToe3D
             private GameTreeNode parent;
             private int? alphaBeta;
             private bool isHuman;
-            private String playerMark;
             private int? parentAlphaBeta;
             private int currentPly;
             private List<int[]> possibleMoves;
             private GameTree GameTree;
 
+            //stor the move to get to the alpha beta that is currently stored
+            private int[] nextMove;
+            //store the move we took to get to the board
             private int[] move;
 
             //get and set properties
             public int[] Move
             {
                 get { return move; }
+            }
+            public int[] NextMove
+            {
+                get { return nextMove; }
             }
             public int AlphaBeta
             {
@@ -84,6 +96,8 @@ namespace TicTacToe3D
                 this.parentAlphaBeta = parentAlpha;
                 children = new List<GameTreeNode>();
                 possibleMoves = new List<int[]>();
+
+                MakeMove();
             }
 
 
@@ -113,10 +127,10 @@ namespace TicTacToe3D
                 }
             }
 
-            void AddChild(GameTreeNode treeNode)
-            {
-                children.Add(treeNode);
-            }
+            //void AddChild(GameTreeNode treeNode)
+            //{
+            //    children.Add(treeNode);
+            //}
 
             //this will be called by the parent
             //check for winner. if not, evaluate board if leaf.
@@ -143,7 +157,7 @@ namespace TicTacToe3D
             //if this node produces a winning board, set alphaBeta
             bool WinningBoard()
             {
-                if (tictactoeForm.CheckForWinner(gameBoard, move[0], move[1], move[2]))
+                if (tictactoeForm.CheckForWinner(gameBoard, move))
                 {
                     if (isHuman)
                     {
@@ -174,10 +188,16 @@ namespace TicTacToe3D
             //This will need to modify alpha beta
             void EvaluateBoard()
             {
-                
+                //get the scores from the boards
+                int score = BoardScore(0) + BoardScore(1) + BoardScore(2);
+
+                //get the scores from 3D 
+                score += Score3DColumns() + Score3DDiagonals() + Score3DRows();
+
+                alphaBeta = score;
             }
 
-            //method to create children
+            //method to create children and update alpha beta of the node based on the children
             void CreateChildren()
             {
                 CreateMoveList();
@@ -188,32 +208,29 @@ namespace TicTacToe3D
                     int childAlpha = treeNode.GetAlphaBeta();
 
                     //if don't currently have alpha beta
+                    //update alpha beta and store the move of that child node
                     if (alphaBeta == null)
                     {
                         alphaBeta = childAlpha;
+                        nextMove = treeNode.Move;
                     }
                     //else, do checks to see if need to update value
                     //if this node is Min (ie human) check if child alpha is lower
-                    else if (isHuman && alphaBeta > childAlpha)
+                    //Or if AI (ie Max) check if child alpha is higher
+                    else if ((isHuman && alphaBeta > childAlpha) || (!isHuman && alphaBeta < childAlpha))
                     {
                         alphaBeta = childAlpha;
-                    }
-                    //if AI (ie Max) check if child alpha is higher
-                    else if (alphaBeta < childAlpha)
-                    {
-                        alphaBeta = childAlpha;
+                        nextMove = treeNode.Move;
                     }
 
                     //check and see if we need to continue checking
                     if (parentAlphaBeta != null)
                     {
-                        if (isHuman && alphaBeta < parentAlphaBeta)
+                        //if we are at min level, return when our value is lower than the parent since parent won't chose us
+                        //if at the max level, return when our value is higher than the parent since parent won't chose us
+                        if ((isHuman && alphaBeta < parentAlphaBeta) || (!isHuman && alphaBeta > parentAlphaBeta))
                         {
                             return;
-                        }
-                        else if (alphaBeta > parentAlphaBeta)
-                        {
-
                         }
                     }
                 }
@@ -235,6 +252,273 @@ namespace TicTacToe3D
                         possibleMoves.Add(new int[] { board, row, column });
                     }
                 }
+            }
+
+            //this will return a score for a board
+            //this method looks only at 1D
+            /* Possible numbers. I will look out for a few and emphasize those. Numbers might be tweaked 
+             * 
+             * 2 player marks = -2. Will make this -75 since next turn Player wins
+             * 2 ai marks = 6. Will make this 25 (more interested in preventing than winning)
+             * 2 player and 1 ai = 1. Will make this 30
+             * 
+             * Ones not currently looking for
+             * 1 player = -1
+             * 1 ai = 3
+             * none = 0
+             * 1 ai and 1 player = 2
+             * 2 ai and 1 player = 5
+             */
+            int BoardScore(int board)
+            {
+                int score = 0;
+                String player = GameTree.GetPlayerMark();
+                String ai = GameTree.GetAIMark();
+
+                //conver board to numbers
+                //this is to make it easier to make decisions
+                int[] numericalBoard = new int[9];
+                for (int i = 0; i < numericalBoard.Length; i++)
+                {
+                    String mark = gameBoard[board, i / 3, i % 3];
+                    if(mark == player)
+                    {
+                        numericalBoard[i] = -1;
+                    }
+                    else if (mark == ai)
+                    {
+                        numericalBoard[i] = 3;
+                    }
+                    else
+                    {
+                        numericalBoard[i] = 0;
+                    }
+                }
+
+                //check rows
+                for (int i = 0; i < numericalBoard.Length; i += 3)
+                {
+                    int x = numericalBoard[i] + numericalBoard[i + 1] + numericalBoard[i + 2];
+                    if(x == -2)
+                    {
+                        score -= 75;
+                    }
+                    else if(x == 1)
+                    {
+                        score += 30;
+                    }
+                    else if (x == 6)
+                    {
+                        score += 25;
+                    }
+                }
+
+                //check columns
+                for (int i = 0; i < 3; i ++)
+                {
+                    int x = numericalBoard[i] + numericalBoard[i + 3] + numericalBoard[i + 6];
+                    if (x == -2)
+                    {
+                        score -= 75;
+                    }
+                    else if (x == 1)
+                    {
+                        score += 30;
+                    }
+                    else if (x == 6)
+                    {
+                        score += 25;
+                    }
+                }
+
+                //check diagonals
+                // first right and then left
+                int temp = numericalBoard[0] + numericalBoard[4] + numericalBoard[8];
+                if (temp == -2)
+                {
+                    score -= 75;
+                }
+                else if (temp == 1)
+                {
+                    score += 30;
+                }
+                else if (temp == 6)
+                {
+                    score += 25;
+                }
+
+                temp = numericalBoard[6] + numericalBoard[4] + numericalBoard[3];
+                if (temp == -2)
+                {
+                    score -= 75;
+                }
+                else if (temp == 1)
+                {
+                    score += 30;
+                }
+                else if (temp == 6)
+                {
+                    score += 25;
+                }
+
+                return score;
+            }
+
+            //int BoardScore3D()
+            //{
+            //    return ;
+            //}
+
+            int Score3DColumns()
+            {
+                //make a numerical array
+                //1st array will hold those from top board to bottom board
+                //2nd will be from bottom board to top board
+                int[,] numericalBoard = new int[2, 9];
+                String player = GameTree.GetPlayerMark();
+                String ai = GameTree.GetAIMark();
+                int score = 0;
+
+                //create the 1st board
+                for (int i = 0; i < 9; i++)
+                {
+                    String mark = gameBoard[i/3, i / 3, i % 3];
+                    if (mark == player)
+                    {
+                        numericalBoard[0, i] = -1;
+                    }
+                    else if (mark == ai)
+                    {
+                        numericalBoard[0, i] = 3;
+                    }
+                    else
+                    {
+                        numericalBoard[0, i] = 0;
+                    }
+                }
+
+                //create the 2nd board
+                for (int i = 0; i < 9; i++)
+                {
+                    String mark = gameBoard[(2 - (i / 3)), i / 3, i % 3];
+                    if (mark == player)
+                    {
+                        numericalBoard[0, i] = -1;
+                    }
+                    else if (mark == ai)
+                    {
+                        numericalBoard[0, i] = 3;
+                    }
+                    else
+                    {
+                        numericalBoard[0, i] = 0;
+                    }
+                }
+
+                //check columns
+                for (int j = 0; j < 2; j++)
+                {
+                    for (int i = 0; i < 3; i++)
+                    {
+                        int x = numericalBoard[j,i] + numericalBoard[j,i + 3] + numericalBoard[j,i + 6];
+                        if (x == -2)
+                        {
+                            score -= 75;
+                        }
+                        else if (x == 1)
+                        {
+                            score += 30;
+                        }
+                        else if (x == 6)
+                        {
+                            score += 25;
+                        }
+                    }
+                }
+
+                return score;
+            }
+
+            int Score3DRows()
+            {
+                //make a numerical array
+                //1st array will hold those from top board to bottom board
+                //2nd will be from bottom board to top board
+                int[,] numericalBoard = new int[2, 9];
+                String player = GameTree.GetPlayerMark();
+                String ai = GameTree.GetAIMark();
+                int score = 0;
+
+                //create the 1st board
+                for (int i = 0; i < 3; i++)
+                {
+                    for (int j = 0; j < 3; j++)
+                    {
+                        String mark = gameBoard[j, i, j];
+                        if (mark == player)
+                        {
+                            numericalBoard[0, i + j] = -1;
+                        }
+                        else if (mark == ai)
+                        {
+                            numericalBoard[0, i + j] = 3;
+                        }
+                        else
+                        {
+                            numericalBoard[0, i + j] = 0;
+                        }
+                    }
+                }
+
+                //create the 2nd board
+                for (int i = 0; i < 3; i++)
+                {
+                    for (int j = 0; j < 3; j++)
+                    {
+                        String mark = gameBoard[2 - j, i, 2 - j];
+                        if (mark == player)
+                        {
+                            numericalBoard[0, i + j] = -1;
+                        }
+                        else if (mark == ai)
+                        {
+                            numericalBoard[0, i + j] = 3;
+                        }
+                        else
+                        {
+                            numericalBoard[0, i + j] = 0;
+                        }
+                    }
+                }
+
+                //check rows
+                for(int j = 0; j < 2; j++)
+                {
+                    for (int i = 0; i < 9; i += 3)
+                    {
+                        int x = numericalBoard[j,i] + numericalBoard[j,i + 1] + numericalBoard[j,i + 2];
+                        if (x == -2)
+                        {
+                            score -= 75;
+                        }
+                        else if (x == 1)
+                        {
+                            score += 30;
+                        }
+                        else if (x == 6)
+                        {
+                            score += 25;
+                        }
+                    }
+                }
+
+                return score;
+            }
+
+            int Score3DDiagonals()
+            {
+                int score = 0;
+                return score;
             }
         }
     }
