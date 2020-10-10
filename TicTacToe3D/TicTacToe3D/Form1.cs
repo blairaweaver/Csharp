@@ -224,7 +224,7 @@ namespace TicTacToe3D
 
             gameBoard[move[0], move[1], move[2]] = GetAIMark();
             Button button = ConvertMoveToBoard(move);
-            if(button != null)
+            if (button != null)
             {
                 button.Text = GetAIMark();
             }
@@ -240,6 +240,9 @@ namespace TicTacToe3D
                 //at the end, switch back to human
                 humanTurn = true;
             }
+
+            //this is for when the ai is disabled to test the winning conditions
+            //humanTurn = true;
         }
 
         //This is called when any of the buttons is selected.

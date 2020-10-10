@@ -13,8 +13,8 @@ namespace TicTacToe3D
         bool humanPlayerOne;
         public GameTree(String[,,] gameboard, bool humanPlayerOne)
         {
-            root = new GameTreeNode((String[,,]) gameboard.Clone(), this);
             this.humanPlayerOne = humanPlayerOne;
+            root = new GameTreeNode((String[,,]) gameboard.Clone(), this);
         }
 
         string GetPlayerMark()
@@ -56,6 +56,9 @@ namespace TicTacToe3D
             private List<GameTreeNode> children;
             private GameTreeNode parent;
             private int? alphaBeta;
+
+            //This is used to keep track of if the node is alpha beta
+            //as well as determine who is making the move
             private bool isHuman;
             private int? parentAlphaBeta;
             private int currentPly;
@@ -115,9 +118,12 @@ namespace TicTacToe3D
             }
 
             //this is the method that will put the new move down
+            //Since the isHuman is also used to determine the alphabeta
+            // and MakeMove puts down the move to get here
+            // MakeMove is opposite of isHuman
             void MakeMove()
             {
-                if (isHuman)
+                if (!isHuman)
                 {
                     gameBoard[move[0], move[1], move[2]] = GameTree.GetPlayerMark();
                 }
@@ -141,7 +147,7 @@ namespace TicTacToe3D
                 {
                     
                 }
-                else if (currentPly == 3)
+                else if (currentPly == 5)
                 {
                     EvaluateBoard();
                 }
@@ -155,13 +161,15 @@ namespace TicTacToe3D
             }
 
             //if this node produces a winning board, set alphaBeta
+            //As with MakeMove, this operates on the same principal
+            //The move to get to this node is opposite of the alphaBeta
             bool WinningBoard()
             {
                 if (tictactoeForm.CheckForWinner(gameBoard, move))
                 {
-                    if (isHuman)
+                    if (!isHuman)
                     {
-                        alphaBeta = -100;
+                        alphaBeta = -200;
                     }
                     else
                     {
@@ -260,7 +268,7 @@ namespace TicTacToe3D
              * 
              * 2 player marks = -2. Will make this -75 since next turn Player wins
              * 2 ai marks = 6. Will make this 25 (more interested in preventing than winning)
-             * 2 player and 1 ai = 1. Will make this 30
+             * 2 player and 1 ai = 1. Will make this 50
              * 
              * Ones not currently looking for
              * 1 player = -1
@@ -305,7 +313,7 @@ namespace TicTacToe3D
                     }
                     else if(x == 1)
                     {
-                        score += 30;
+                        score += 50;
                     }
                     else if (x == 6)
                     {
@@ -323,7 +331,7 @@ namespace TicTacToe3D
                     }
                     else if (x == 1)
                     {
-                        score += 30;
+                        score += 50;
                     }
                     else if (x == 6)
                     {
@@ -340,7 +348,7 @@ namespace TicTacToe3D
                 }
                 else if (temp == 1)
                 {
-                    score += 30;
+                    score += 50;
                 }
                 else if (temp == 6)
                 {
@@ -354,7 +362,7 @@ namespace TicTacToe3D
                 }
                 else if (temp == 1)
                 {
-                    score += 30;
+                    score += 50;
                 }
                 else if (temp == 6)
                 {
@@ -427,7 +435,7 @@ namespace TicTacToe3D
                         }
                         else if (x == 1)
                         {
-                            score += 30;
+                            score += 50;
                         }
                         else if (x == 6)
                         {
@@ -503,7 +511,7 @@ namespace TicTacToe3D
                         }
                         else if (x == 1)
                         {
-                            score += 30;
+                            score += 50;
                         }
                         else if (x == 6)
                         {
@@ -518,6 +526,98 @@ namespace TicTacToe3D
             int Score3DDiagonals()
             {
                 int score = 0;
+                String player = GameTree.GetPlayerMark();
+                String ai = GameTree.GetAIMark();
+
+                //every 3 will be from a diagonal.
+                //Will search them like rows later
+                int[] numericalBoard = new int[12];
+
+                for (int i = 0; i < 3; i++)
+                {
+                    String mark = gameBoard[i, i, i];
+                    if (mark == player)
+                    {
+                        numericalBoard[i] = -1;
+                    }
+                    else if (mark == ai)
+                    {
+                        numericalBoard[i] = 3;
+                    }
+                    else
+                    {
+                        numericalBoard[i] = 0;
+                    }
+                }
+
+                for (int i = 0; i < 3; i++)
+                {
+                    String mark = gameBoard[i, 2 - i, i];
+                    if (mark == player)
+                    {
+                        numericalBoard[i + 3] = -1;
+                    }
+                    else if (mark == ai)
+                    {
+                        numericalBoard[i + 3] = 3;
+                    }
+                    else
+                    {
+                        numericalBoard[i + 3] = 0;
+                    }
+                }
+
+                for (int i = 0; i < 3; i++)
+                {
+                    String mark = gameBoard[2- i, i, i];
+                    if (mark == player)
+                    {
+                        numericalBoard[i + 6] = -1;
+                    }
+                    else if (mark == ai)
+                    {
+                        numericalBoard[i + 6] = 3;
+                    }
+                    else
+                    {
+                        numericalBoard[i + 6] = 0;
+                    }
+                }
+
+                for (int i = 0; i < 3; i++)
+                {
+                    String mark = gameBoard[2 - i, 2 - i, i];
+                    if (mark == player)
+                    {
+                        numericalBoard[i +9] = -1;
+                    }
+                    else if (mark == ai)
+                    {
+                        numericalBoard[i + 9] = 3;
+                    }
+                    else
+                    {
+                        numericalBoard[i + 9] = 0;
+                    }
+                }
+
+                //check diagonals like rows
+                for (int i = 0; i < numericalBoard.Length; i += 3)
+                {
+                    int x = numericalBoard[i] + numericalBoard[i + 1] + numericalBoard[i + 2];
+                    if (x == -2)
+                    {
+                        score -= 75;
+                    }
+                    else if (x == 1)
+                    {
+                        score += 50;
+                    }
+                    else if (x == 6)
+                    {
+                        score += 25;
+                    }
+                }
                 return score;
             }
         }

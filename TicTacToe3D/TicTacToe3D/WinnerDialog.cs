@@ -22,7 +22,7 @@ namespace TicTacToe3D
             //Since default Dialog is for a human win
             if(!humanWin)
             {
-                this.Name = "Game Over";
+                this.Text = "Game Over";
                 winnerTextBox.Text = "The Computer has won. Better luck next time!";
             }
         }
