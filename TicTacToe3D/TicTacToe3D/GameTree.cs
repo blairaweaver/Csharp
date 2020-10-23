@@ -183,15 +183,6 @@ namespace TicTacToe3D
                 }
             }
 
-            ////this updates the children if the alpha beta is updated
-            //void NotifyChildrenAlphaBeta()
-            //{
-            //    foreach(GameTreeNode child in children)
-            //    {
-            //        child.ParentAlphaBeta = AlphaBeta;
-            //    }
-            //}
-
             //will look at the board and evaluate
             //This will need to modify alpha beta
             void EvaluateBoard()
@@ -371,11 +362,6 @@ namespace TicTacToe3D
 
                 return score;
             }
-
-            //int BoardScore3D()
-            //{
-            //    return ;
-            //}
 
             int Score3DColumns()
             {

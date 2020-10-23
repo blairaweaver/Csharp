@@ -1,0 +1,15 @@
+C:\Users\blair\source\repos\Csharp\myRSA\myRSA\bin\Debug\netcoreapp3.1\myRSA.exe
+C:\Users\blair\source\repos\Csharp\myRSA\myRSA\bin\Debug\netcoreapp3.1\myRSA.deps.json
+C:\Users\blair\source\repos\Csharp\myRSA\myRSA\bin\Debug\netcoreapp3.1\myRSA.runtimeconfig.json
+C:\Users\blair\source\repos\Csharp\myRSA\myRSA\bin\Debug\netcoreapp3.1\myRSA.runtimeconfig.dev.json
+C:\Users\blair\source\repos\Csharp\myRSA\myRSA\bin\Debug\netcoreapp3.1\myRSA.dll
+C:\Users\blair\source\repos\Csharp\myRSA\myRSA\bin\Debug\netcoreapp3.1\myRSA.pdb
+C:\Users\blair\source\repos\Csharp\myRSA\myRSA\obj\Debug\netcoreapp3.1\myRSA.csprojAssemblyReference.cache
+C:\Users\blair\source\repos\Csharp\myRSA\myRSA\obj\Debug\netcoreapp3.1\myRSA.Form1.resources
+C:\Users\blair\source\repos\Csharp\myRSA\myRSA\obj\Debug\netcoreapp3.1\myRSA.csproj.GenerateResource.cache
+C:\Users\blair\source\repos\Csharp\myRSA\myRSA\obj\Debug\netcoreapp3.1\myRSA.AssemblyInfoInputs.cache
+C:\Users\blair\source\repos\Csharp\myRSA\myRSA\obj\Debug\netcoreapp3.1\myRSA.AssemblyInfo.cs
+C:\Users\blair\source\repos\Csharp\myRSA\myRSA\obj\Debug\netcoreapp3.1\myRSA.csproj.CoreCompileInputs.cache
+C:\Users\blair\source\repos\Csharp\myRSA\myRSA\obj\Debug\netcoreapp3.1\myRSA.dll
+C:\Users\blair\source\repos\Csharp\myRSA\myRSA\obj\Debug\netcoreapp3.1\myRSA.pdb
+C:\Users\blair\source\repos\Csharp\myRSA\myRSA\obj\Debug\netcoreapp3.1\myRSA.genruntimeconfig.cache
